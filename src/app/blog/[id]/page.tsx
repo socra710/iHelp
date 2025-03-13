@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma'; // 싱글톤 인스턴스 가져오기
 
 async function getPost(id: number) {
   const post = await prisma.post.findUnique({
@@ -20,12 +18,8 @@ async function getPost(id: number) {
   return post;
 }
 
-export default async function BlogPostPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const post = await getPost(parseInt(params.id));
+export default async function BlogPostPage({ params }: { params: { id: string } }) {
+  const post = await getPost(1);
 
   if (!post) {
     notFound();
@@ -35,8 +29,7 @@ export default async function BlogPostPage({
     <article className="bg-white p-6 rounded-lg shadow-md">
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <p className="text-gray-600 mb-6">
-        작성자: {post.author.name} |{' '}
-        {new Date(post.createdAt).toLocaleDateString()}
+        작성자: {post.author.name} | {new Date(post.createdAt).toLocaleDateString()}
       </p>
       <div className="prose max-w-none">
         <p>{post.content}</p>
