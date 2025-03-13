@@ -19,8 +19,8 @@ async function getPost(id: number) {
   return post;
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default async function BlogPostPage({ params }: { params: { id: string } }) {
-  const post = await getPost(1);
+export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const post = await getPost(parseInt((await params).id));
 
   if (!post) {
     notFound();
