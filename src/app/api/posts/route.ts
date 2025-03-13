@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // 싱글톤 인스턴스 가져오기
 
+// 브런치 테스트
 export async function GET() {
   try {
     const posts = await prisma.post.findMany({
