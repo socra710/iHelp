@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma'; // 싱글톤 인스턴스 가져오기
+import Link from 'next/link'; // next/link import 추가
 
 async function getPost(id: number) {
   const post = await prisma.post.findUnique({
