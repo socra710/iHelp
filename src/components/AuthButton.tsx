@@ -14,13 +14,15 @@ export default function AuthButton({ session }: AuthButtonProps) {
         <Image
           src={session.user?.image || '/default-user.png'}
           alt="user"
-          className="w-8 h-8 rounded-full"
+          className="w-8 h-8 rounded-full cursor-pointer"
           width={32}
           height={32}
           onClick={() => signOut()}
         />
       ) : (
-        <div onClick={() => signIn()}>로그인</div>
+        <div className="cursor-pointer" onClick={() => signIn()}>
+          로그인
+        </div>
       )}
     </div>
   );

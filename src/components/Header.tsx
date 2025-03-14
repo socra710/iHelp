@@ -8,10 +8,10 @@ export default async function Header() {
   const session: Session | null = await getServerSession(GET);
 
   return (
-    <header className="bg-gray-800 text-white p-4">
+    <header className="p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">
-          iHelp App
+          i-Help
         </Link>
         <nav>
           <ul className="flex space-x-4">

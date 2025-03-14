@@ -7,7 +7,7 @@ export async function getCsrAll() {
       where: { published: true },
       include: {
         user: {
-          select: { name: true },
+          select: { name: true, image: true },
         },
       },
       orderBy: {
