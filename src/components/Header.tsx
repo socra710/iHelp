@@ -1,6 +1,17 @@
+'use client';
+import { useEffect } from 'react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function Header() {
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    console.log(session?.user?.id);
+    console.log(session?.user?.name);
+    console.log(session?.user?.email);
+  }, [session]);
+
   return (
     <header className="bg-gray-800 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -10,24 +21,15 @@ export default function Header() {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <Link href="/" className="hover:text-gray-300">
-                홈
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="hover:text-gray-300">
-                소개
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog" className="hover:text-gray-300">
-                블로그
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:text-gray-300">
-                연락처
-              </Link>
+              {session ? (
+                <>
+                  <div>
+                    {`${session.user?.name}님`} <span onClick={() => signOut()}>로그아웃</span>
+                  </div>
+                </>
+              ) : (
+                <div onClick={() => signIn()}>로그인</div>
+              )}
             </li>
           </ul>
         </nav>

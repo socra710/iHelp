@@ -6,7 +6,7 @@ export async function getCsrAll() {
     const items = await prisma.csr.findMany({
       where: { published: true },
       include: {
-        author: {
+        user: {
           select: { name: true },
         },
       },

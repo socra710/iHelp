@@ -6,7 +6,7 @@ export async function getCsr(id: number) {
     const items = await prisma.csr.findUnique({
       where: { id },
       include: {
-        author: {
+        user: {
           select: { name: true },
         },
       },
