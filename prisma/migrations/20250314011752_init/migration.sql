@@ -1,0 +1,31 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[Csr] (
+    [id] INT NOT NULL IDENTITY(1,1),
+    [title] NVARCHAR(1000) NOT NULL,
+    [content] NVARCHAR(1000),
+    [published] BIT NOT NULL CONSTRAINT [Csr_published_df] DEFAULT 0,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [Csr_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    [updatedAt] DATETIME2 NOT NULL,
+    [authorId] INT NOT NULL,
+    CONSTRAINT [Csr_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+-- AddForeignKey
+ALTER TABLE [dbo].[Csr] ADD CONSTRAINT [Csr_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH
