@@ -7,7 +7,7 @@ export async function getCsr(id: number) {
       where: { id },
       include: {
         user: {
-          select: { name: true },
+          select: { name: true, image: true },
         },
       },
     });
