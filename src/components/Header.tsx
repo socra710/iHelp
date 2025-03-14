@@ -1,16 +1,11 @@
-'use client';
-import { useEffect } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
 import Link from 'next/link';
+import { GET } from '@/app/api/auth/[...nextauth]/route';
+import AuthButton from './AuthButton';
+import { Session } from 'next-auth';
 
-export default function Header() {
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    console.log(session?.user?.id);
-    console.log(session?.user?.name);
-    console.log(session?.user?.email);
-  }, [session]);
+export default async function Header() {
+  const session: Session | null = await getServerSession(GET);
 
   return (
     <header className="bg-gray-800 text-white p-4">
@@ -21,15 +16,7 @@ export default function Header() {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              {session ? (
-                <>
-                  <div>
-                    {`${session.user?.name}님`} <span onClick={() => signOut()}>로그아웃</span>
-                  </div>
-                </>
-              ) : (
-                <div onClick={() => signIn()}>로그인</div>
-              )}
+              <AuthButton session={session} />
             </li>
           </ul>
         </nav>
