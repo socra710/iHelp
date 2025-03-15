@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getCsrAll } from '@api/csr/routs';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -14,7 +15,7 @@ type CsrItem = {
   content: string;
 };
 
-export default async function BlogPage() {
+export default async function CsrPage() {
   const response = await getCsrAll();
 
   if (response.status !== 200) {

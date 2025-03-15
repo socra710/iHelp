@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // 싱글톤 인스턴스 가져오기
 
 export async function getCsrAll() {
+  // 데이터를 2초 동안 지연
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   try {
     const items = await prisma.csr.findMany({
       where: { published: true },
