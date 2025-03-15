@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'; // 싱글톤 인스턴스 가져오기
 
 export async function getCsrAll() {
   // Add a 2-second delay
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
   try {
     const items = await prisma.csr.findMany({
       where: { published: true },
