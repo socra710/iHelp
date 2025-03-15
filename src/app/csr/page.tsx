@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getCsrAll } from '@api/csr/routs';
-import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 

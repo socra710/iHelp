@@ -1,6 +1,3 @@
-import Image from 'next/image';
-import Link from 'next/link';
-
 export default function Loading() {
   return (
     <div className="space-y-6">
