@@ -3,7 +3,7 @@ export default function Loading() {
     <div className="space-y-6">
       {/* <h1 className="text-3xl font-bold">CSR 현황</h1> */}
       <div className="grid grid-cols-1 gap-3">
-        <article className="bg-white p-6 rounded-lg shadow-md">
+        <article className="bg-white border border-gray-300 p-6 rounded-lg">
           <div className="flex items-center mb-4">
             <div
               className="w-8 h-8 rounded-full cursor-pointer"
@@ -26,7 +26,7 @@ export default function Loading() {
         </article>
       </div>
       <div className="grid grid-cols-1 gap-3">
-        <article className="bg-white p-6 rounded-lg shadow-md">
+        <article className="bg-white border border-gray-300 p-6 rounded-lg">
           <div className="flex items-center mb-4">
             <div
               className="w-8 h-8 rounded-full cursor-pointer"
@@ -49,7 +49,7 @@ export default function Loading() {
         </article>
       </div>
       <div className="grid grid-cols-1 gap-3">
-        <article className="bg-white p-6 rounded-lg shadow-md">
+        <article className="bg-white border border-gray-300 p-6 rounded-lg">
           <div className="flex items-center mb-4">
             <div
               className="w-8 h-8 rounded-full cursor-pointer"
@@ -72,7 +72,7 @@ export default function Loading() {
         </article>
       </div>
       <div className="grid grid-cols-1 gap-3">
-        <article className="bg-white p-6 rounded-lg shadow-md">
+        <article className="bg-white border border-gray-300 p-6 rounded-lg">
           <div className="flex items-center mb-4">
             <div
               className="w-8 h-8 rounded-full cursor-pointer"

@@ -17,7 +17,7 @@ export default async function CsrPostPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <article key={item.id} className="bg-white p-6 rounded-lg shadow-md">
+    <article className="bg-white border border-gray-300 p-6 rounded-lg">
       <div className="flex items-center mb-4">
         <Image
           src={item.user.image || '/default-user.png'}
