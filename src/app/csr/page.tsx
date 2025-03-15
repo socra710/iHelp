@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getCsrAll } from '@api/csr/routs';
-import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -26,12 +25,12 @@ export default async function CsrPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">CSR 현황</h1>
+      {/* <h1 className="text-3xl font-bold">CSR 현황</h1> */}
 
       <div className="grid grid-cols-1 gap-3">
         {items.length > 0 ? (
           items.map((csr: CsrItem) => (
-            <article key={csr.id} className="bg-white p-6 rounded-lg shadow-md">
+            <article key={csr.id} className="bg-white border border-gray-300 p-6 rounded-lg">
               <Link href={`/csr/${csr.id}`}>
                 <div className="flex items-center mb-4">
                   <Image

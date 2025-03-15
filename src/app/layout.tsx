@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'i-Help',
-  description: 'i-Help 웹 애플리케이션',
+  description: 'i-Help App',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthProvider>
           <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
+            <main className="flex-grow container mx-auto max-w-[650px] px-4 py-8">{children}</main>
             <Footer />
           </div>
         </AuthProvider>
