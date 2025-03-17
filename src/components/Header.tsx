@@ -1,8 +1,7 @@
-import { getServerSession } from 'next-auth';
+import { getServerSession, Session } from 'next-auth';
 import Link from 'next/link';
 import { GET } from '@/app/api/auth/[...nextauth]/route';
 import AuthButton from './AuthButton';
-import { Session } from 'next-auth';
 
 export default async function Header() {
   const session: Session | null = await getServerSession(GET);

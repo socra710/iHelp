@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getCsr } from '@api/csr/[id]/routs';
-// import Link from 'next/link'; // next/link import 추가
 import Image from 'next/image';
 
 export default async function CsrPostPage({ params }: { params: Promise<{ id: string }> }) {
