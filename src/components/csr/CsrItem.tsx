@@ -4,6 +4,8 @@ import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import React from 'react';
 
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+
 type CsrItemProps = {
   id: number;
   user: {
@@ -44,7 +46,7 @@ export default function CsrItem({ id, user, createdAt, content, session }: CsrIt
           </span>
         </span>
       </div>
-      <div className="mb-4" dangerouslySetInnerHTML={{ __html: content }} />
+      <div className="fr-view mb-4" dangerouslySetInnerHTML={{ __html: content }} />
     </article>
   );
 }

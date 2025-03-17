@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getCsr } from '@api/csr/[id]/routs';
 import Image from 'next/image';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
 
 export default async function CsrPostPage({ params }: { params: Promise<{ id: string }> }) {
   const response = await getCsr(parseInt((await params).id));
@@ -32,7 +33,7 @@ export default async function CsrPostPage({ params }: { params: Promise<{ id: st
           </span>
         </span>
       </div>
-      <div className="mb-4" dangerouslySetInnerHTML={{ __html: item.content }} />{' '}
+      <div className="fr-view mb-4" dangerouslySetInnerHTML={{ __html: item.content }} />{' '}
       {/* <Link href="/csr" className="text-blue-600 hover:underline">
         &larr; 뒤로{' '}
       </Link> */}
