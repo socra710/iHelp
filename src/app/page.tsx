@@ -1,4 +1,4 @@
-import Csr from '@/app/csr/page';
+import Csr from '@/app/csr/(overview)/page';
 
 export default function Home() {
   return (
