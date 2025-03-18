@@ -1,9 +1,16 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 import { getCsr } from '@api/csr/[id]/routs';
 import Image from 'next/image';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 
 export default async function CsrPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await getServerSession();
+
+  if (!session) {
+    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/signin`);
+  }
+
   const response = await getCsr(parseInt((await params).id));
 
   if (response.status !== 200) {
