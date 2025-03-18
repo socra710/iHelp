@@ -1,7 +1,6 @@
 export default function Loading() {
   return (
     <div className="space-y-6">
-      {/* <h1 className="text-3xl font-bold">CSR 현황</h1> */}
       <div className="grid grid-cols-1 gap-3">
         <article className="bg-white border border-gray-300 p-6 rounded-lg">
           <div className="flex items-center mb-4">
