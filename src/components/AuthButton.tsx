@@ -14,7 +14,7 @@ export default function AuthButton({ session }: AuthButtonProps) {
         <Image
           src={session.user?.image || '/default-user.png'}
           alt="user"
-          className="w-8 h-8 rounded-full cursor-pointer"
+          className="rounded-full cursor-pointer"
           width={32}
           height={32}
           onClick={() => signOut()}
