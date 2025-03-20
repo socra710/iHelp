@@ -1,89 +1,76 @@
 'use client';
-import { useEffect, useCallback } from 'react';
-import { getMessaging, onMessage, getToken, isSupported, Unsubscribe } from 'firebase/messaging';
+import { useEffect } from 'react';
+import { getMessaging, onMessage, getToken, isSupported } from 'firebase/messaging';
 import { firebaseApp } from '@/lib/firebase';
 
-export default function FireBase() {
-  const getMessagingInstance = useCallback(async () => {
-    try {
-      const isSupportedBrowser = await isSupported();
-      return isSupportedBrowser ? getMessaging(firebaseApp) : null;
-    } catch (err) {
-      console.error('Error getting messaging instance:', err);
-      return null;
+const messaging = async () => {
+  try {
+    const isSupportedBrowser = await isSupported();
+    if (isSupportedBrowser) {
+      return getMessaging(firebaseApp);
     }
-  }, []);
+    return null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
 
-  const requestPermission = useCallback(async () => {
-    if (!('Notification' in window)) {
-      console.warn('This browser does not support notifications.');
-      return;
-    }
+const requestPermission = async () => {
+  const messagingResolve = await messaging();
+  if (!('Notification' in window)) {
+    console.warn('This browser does not support notifications.');
+    return;
+  }
+  if (messagingResolve) {
+    const token = await getToken(messagingResolve);
+    console.log(token);
+  }
 
-    const messagingInstance = await getMessagingInstance();
-    if (!messagingInstance) return;
-
-    if (Notification.permission === 'granted') {
-      try {
-        const token = await getToken(messagingInstance);
-        console.log('FCM Token:', token);
-      } catch (error) {
-        console.error('Error getting token:', error);
-      }
-    } else {
-      try {
-        const permission = await Notification.requestPermission();
-        console.log('Notification permission:', permission);
-      } catch (error) {
-        console.error('Error requesting permission:', error);
-      }
-    }
-  }, []);
-
-  const setupMessageListener = useCallback(async () => {
-    const messagingInstance = await getMessagingInstance();
-    if (!messagingInstance) return;
-
-    return onMessage(messagingInstance, (payload) => {
-      if (
-        !('Notification' in window) ||
-        Notification.permission !== 'granted' ||
-        document.visibilityState !== 'visible'
-      ) {
-        return;
-      }
-
-      console.log('Received message payload:', payload);
-
-      if (payload.data && payload.notification) {
-        const title = `${payload.notification.title} foreground`;
-        const body = payload.notification.body;
-        const redirectUrl = '/';
-
-        const notification = new Notification(title, {
-          body,
-          icon: '/icons/favicon-96x96.png',
-        });
-
-        notification.onclick = () => {
-          window.open(redirectUrl, '_blank')?.focus();
-        };
-      }
+  const permission = Notification.permission;
+  if (permission === 'granted') {
+    return;
+  } else {
+    Notification.requestPermission().then((permission) => {
+      console.log('permission', permission);
     });
-  }, []);
+    return;
+  }
+};
 
+export default function FireBase() {
   useEffect(() => {
     requestPermission();
 
-    let unsubscribe: Unsubscribe | undefined;
-    setupMessageListener().then((unsub) => {
-      unsubscribe = unsub;
-    });
-
-    return () => {
-      if (unsubscribe) unsubscribe();
+    const onMessageListener = async () => {
+      const messagingResolve = await messaging();
+      if (messagingResolve) {
+        onMessage(messagingResolve, (payload) => {
+          if (!('Notification' in window)) {
+            return;
+          }
+          const permission = Notification.permission;
+          const title = payload.notification?.title + ' foreground';
+          const redirectUrl = '/';
+          const body = payload.notification?.body;
+          if (permission === 'granted' && document.visibilityState === 'visible') {
+            console.log('payload', payload);
+            if (payload.data) {
+              const notification = new Notification(title, {
+                body,
+                icon: '/icons/favicon-96x96.png',
+              });
+              notification.onclick = () => {
+                window.open(redirectUrl, '_blank')?.focus();
+              };
+            }
+          }
+        });
+      }
     };
-  }, [requestPermission, setupMessageListener]);
+
+    onMessageListener();
+  }, []);
 
   return null;
 }
