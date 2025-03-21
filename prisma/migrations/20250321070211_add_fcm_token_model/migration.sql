@@ -1,0 +1,31 @@
+BEGIN TRY
+
+BEGIN TRAN;
+
+-- CreateTable
+CREATE TABLE [dbo].[FcmToken] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [user_id] NVARCHAR(1000),
+    [token] NVARCHAR(1000) NOT NULL,
+    [deviceInfo] NVARCHAR(1000),
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [FcmToken_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    [updatedAt] DATETIME2 NOT NULL,
+    CONSTRAINT [FcmToken_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [FcmToken_token_key] UNIQUE NONCLUSTERED ([token])
+);
+
+-- AddForeignKey
+ALTER TABLE [dbo].[FcmToken] ADD CONSTRAINT [FcmToken_user_id_fkey] FOREIGN KEY ([user_id]) REFERENCES [dbo].[users]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
+
+COMMIT TRAN;
+
+END TRY
+BEGIN CATCH
+
+IF @@TRANCOUNT > 0
+BEGIN
+    ROLLBACK TRAN;
+END;
+THROW
+
+END CATCH

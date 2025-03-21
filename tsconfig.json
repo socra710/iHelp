@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
       "@api/*": ["./src/app/api/*"], // Api directory
       "@components/*": ["./src/components/*"], // Components directory
-      "@lib/*": ["./src/lib/*"] // lib directory
+      "@lib/*": ["./src/lib/*"], // lib directory
+      "@utils/*": ["./src/utils/*"] // utils directory
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
