@@ -1,75 +1,103 @@
 'use client';
 import { useEffect } from 'react';
-import { getMessaging, onMessage, getToken, isSupported } from 'firebase/messaging';
+import { getMessaging, onMessage, getToken, isSupported, Unsubscribe } from 'firebase/messaging';
 import { firebaseApp } from '@/lib/firebase';
-
-const messaging = async () => {
-  try {
-    const isSupportedBrowser = await isSupported();
-    if (isSupportedBrowser) {
-      return getMessaging(firebaseApp);
-    }
-    return null;
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-};
-
-const requestPermission = async () => {
-  const messagingResolve = await messaging();
-  if (!('Notification' in window)) {
-    console.warn('This browser does not support notifications.');
-    return;
-  }
-  if (messagingResolve) {
-    const token = await getToken(messagingResolve);
-    console.log(token);
-  }
-
-  const permission = Notification.permission;
-  if (permission === 'granted') {
-    return;
-  } else {
-    Notification.requestPermission().then((permission) => {
-      console.log('permission', permission);
-    });
-    return;
-  }
-};
 
 export default function FireBase() {
   useEffect(() => {
-    requestPermission();
+    let unsubscribe: Unsubscribe | undefined;
 
-    const onMessageListener = async () => {
-      const messagingResolve = await messaging();
-      if (messagingResolve) {
-        onMessage(messagingResolve, (payload) => {
-          if (!('Notification' in window)) {
-            return;
-          }
-          const permission = Notification.permission;
-          const title = payload.notification?.title + ' foreground';
-          const redirectUrl = '/';
-          const body = payload.notification?.body;
-          if (permission === 'granted' && document.visibilityState === 'visible') {
-            console.log('payload', payload);
-            if (payload.data) {
-              const notification = new Notification(title, {
-                body,
-                icon: '/icons/favicon-96x96.png',
-              });
-              notification.onclick = () => {
-                window.open(redirectUrl, '_blank')?.focus();
-              };
-            }
-          }
+    const saveToken = async (token: string) => {
+      try {
+        const response = await fetch('/api/fcm/token/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token, userId: 'currentUserId', deviceInfo: 'deviceInfo' }), // Replace 'currentUserId' and 'deviceInfo' with actual values
         });
+
+        if (!response.ok) {
+          console.error('Failed to save token:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error saving token:', error);
       }
     };
 
-    onMessageListener();
+    const setup = async () => {
+      try {
+        // Check if browser supports Firebase messaging
+        const isSupportedBrowser = await isSupported();
+        if (!isSupportedBrowser) {
+          console.warn('Browser does not support Firebase messaging');
+          return;
+        }
+
+        // Get messaging instance
+        const messagingInstance = getMessaging(firebaseApp);
+
+        // Request permission and get token
+        if (!('Notification' in window)) {
+          console.warn('This browser does not support notifications.');
+          return;
+        }
+
+        if (Notification.permission === 'granted') {
+          try {
+            const token = await getToken(messagingInstance);
+            console.log('FCM Token:', token);
+            await saveToken(token);
+          } catch (error) {
+            console.error('Error getting token:', error);
+          }
+        } else {
+          try {
+            const permission = await Notification.requestPermission();
+            console.log('Notification permission:', permission);
+          } catch (error) {
+            console.error('Error requesting permission:', error);
+          }
+        }
+
+        // Set up message listener
+        unsubscribe = onMessage(messagingInstance, (payload) => {
+          if (
+            !('Notification' in window) ||
+            Notification.permission !== 'granted' ||
+            document.visibilityState !== 'visible'
+          ) {
+            return;
+          }
+
+          console.log('Received message payload:', payload);
+
+          if (payload.data) {
+            const title = `${payload.data.title} foreground`;
+            const body = payload.data.body;
+            const redirectUrl = '/';
+
+            const notification = new Notification(title, {
+              body,
+              icon: '/icons/favicon-96x96.png',
+            });
+
+            notification.onclick = () => {
+              window.open(redirectUrl, '_blank')?.focus();
+            };
+          }
+        });
+      } catch (err) {
+        console.error('Error setting up Firebase messaging:', err);
+      }
+    };
+
+    setup();
+
+    // Cleanup function
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   return null;
